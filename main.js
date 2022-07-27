@@ -23,12 +23,89 @@ const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3]
 const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5]
 
 
-// Return true when card is valid, return false when card is invalid
+// Add your functions below:
 
-const validateCred = batch.forEach(card => {
+const validateCred = array => {
+    let digitCheck = 0; //set up for card numbers that are < 16 char
+    let sum = 0; 
+    let newArr = [];
     
-});
-
+    for (let i = array.length - 1; i >= 0; i--) {
+      digitCheck++;  //increments at the beginning of each loop, used instead of i % 2 to solve the < 16 numbers problem
+      // this is where luhn algoritm takes place
+      if (digitCheck % 2 === 0) {
+          if ((array[i] * 2) > 9) {
+            newArr.push((array[i] * 2) - 9);
+          } else {
+            newArr.push(array[i] * 2);
+          };
+      } else {
+        newArr.push(array[i]);
+        }
+    }
+    // summing up all numbers in the array
+      for (j = 0; j < newArr.length; j++) {
+        sum += newArr[j];
+      }
+    // checking if modulo is 0
+      if (sum % 10 === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    
+    // function to find and organize valid and invalid numbers into arrays
+    const findInvalidCards = nestedArray => {
+      const invalidArr= [];
+      for (let k = 0; k < nestedArray.length; k++) {
+        validateCred(nestedArray[k]);
+        if (validateCred(nestedArray[k]) === false) {
+            invalidArr.push(nestedArray[k]);
+        }
+      } 
+      return invalidArr;
+    }
+    
+    // prints names of card companies that released invalid cards
+    const idInvalidCardCompanies = nestedArrayInvalidNum => {
+      const cardCompany = [];
+      for (let l = 0; l < nestedArrayInvalidNum.length; l++) {
+        if (nestedArrayInvalidNum[l][0] === 3) {
+          if (cardCompany.indexOf('Amex') === -1) {
+            cardCompany.push('Amex');
+          } else {
+          continue;
+          }
+        } else if (nestedArrayInvalidNum[l][0] === 4) {
+          if (cardCompany.indexOf('Visa') === -1) {
+            cardCompany.push('Visa');
+          } else {
+          continue;
+          }
+        } else if (nestedArrayInvalidNum[l][0] === 5) {
+          if (cardCompany.indexOf('Mastercard') === -1) {
+            cardCompany.push('Mastercard');
+          } else {
+          continue;
+          }
+        } else if (nestedArrayInvalidNum[l][0] === 6) {
+         if (cardCompany.indexOf('Discover') === -1) {
+            cardCompany.push('Discover');
+          } else {
+          continue;
+          }
+        } else {
+          if (cardCompany.indexOf('Company not found') === -1) {
+            cardCompany.push('Company not found');
+          } else {
+          continue;
+          }
+        } 
+      } return cardCompany;
+    }
+    
+    console.log(idInvalidCardCompanies(batch));
 
 
 
